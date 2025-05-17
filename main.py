@@ -16,5 +16,30 @@ from nltk.corpus import wordnet #wordnet nos ayuda a obtener sinonimos de una pa
 
 # indicamos la ruta donde nltk buscara los datos desgargados en nuestro ckomputador
 
-nltk.data.bath.append ('c:\Users\USUARIO\AppData\Roaming\nltk_data')
-nltk.download('punkt')
+nltk.data.path.append(r'C:\Users\USUARIO\AppData\Roaming\nltk_data')
+nltk.download('punkt') # es un paquete para dividir frases en palabras
+nltk.download('wordnet') # paquete para encontrar sinonimos de palabras
+
+# función para cargar las películas desde un archivo csv
+
+def load_movies(): 
+    # leemos el archivo que contiene inforamción del películas y seleccionamos las columnas más importantes
+    df = pd.read_csv("./Dataset/netflix_titles.csv")[['show_id','title','release_year','listed_in','rating','description']]
+
+    # renombramos las columnas para que sean más fáciles de entender
+    df.columns = ['id','title','year','category','rating','overview']
+
+    # llenamos los espacios vacios con texto vacio y convertimos los datos en una lista de diccionarios
+    return df.fillna('').to_dict(orient='records')
+
+# cargamos las películas al iniciar la API para no ller el archivo cada vez que alguien pregunte por ellas
+movies_list = load_movies()
+
+# funcion para encontrar sinónimos de una palabra
+def get_synonmys(word):
+    # usamos wirdnets para encontrar distintas palabras que significa lo mismo
+    return{lemma.name().lower() for syn in wordnet.synsets(word) for lemma in syn.lemmas()}
+
+# creamos la aplicación FastAPI que sera el motor de nuestre APPI
+# esto inicializa la API con un nombre y una versión
+
