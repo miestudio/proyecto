@@ -85,10 +85,8 @@ def chatbot(query: str):
     })
 # ruta para busar películas por categoria específica
 
-@app.get ('/movies/' , tags=['Movies'])
+# Ruta para buscar películas por categoría específica
+@app.get ('/movies/by_category/', tags=['Movies'])
 def get_movies_by_category(category: str):
-     # filtramos la lista de películas según la categoría
-      return [m for m in movies_list if category.lower() in m ['category'].lower()]
-
-                                                            
-
+    # Filtramos la lista de películas según la categoría ingresada
+    return [m for m in movies_list if category.lower() in m['category'].lower()]
